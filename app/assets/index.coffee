@@ -1,9 +1,11 @@
 $ ->
   $.get "/lunchOrders", (data) ->
-    $.each data, (index, order) ->
+    $.each data, (index, lunchOrder) ->
         id = "order" + index
         elem = "<tr id=" + id + ">"
         $("#orders").append $(elem)
-        $("#" + id).append $("<td>").text order.assignee
-        $("#" + id).append $("<td>").text order.contents
-        $("#" + id).append $("<td>").text order.date
+        $("#" + id).append $("<td>").text lunchOrder.person
+        $("#" + id).append $("<td>").text lunchOrder.restaurant
+        $("#" + id).append $("<td>").text lunchOrder.order
+        $("#" + id).append $("<td>").text lunchOrder.specialRequest
+

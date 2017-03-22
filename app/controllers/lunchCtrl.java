@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import models.LunchForm;
 import models.LunchOrder;
+import models.Restaurant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,27 +27,35 @@ import views.html.*;
 
 @org.springframework.stereotype.Controller
 public class lunchCtrl extends play.mvc.Controller {
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-//public class Application extends Controller {
-//
-//    public static Result index() {
-//        return ok(index.render("hello, world", play.data.Form.form(models.LunchOrder.class)));
-//    }
-//    public static Result addLunchOrder() {
-//        play.data.Form<models.LunchOrder> form = play.data.Form.form(models.LunchOrder.class).bindFromRequest();
-//        if (form.hasErrors()) {
-//            return badRequest(index.render("hello, world", form));
-//        }
-//        else {
-//            models.LunchOrder order = form.get();
-//            order.save();
-//            return redirect(routes.Application.index());
-//        }
-//    }
-//    public static Result getLunchOrders() {
-//        java.util.List<models.LunchOrder> orders = new play.db.ebean.Model.Finder(String.class, models.LunchOrder.class).all();
-//        return ok(play.libs.Json.toJson(orders));
-//    }
-//
-//}
+    @Inject private LunchService lunchService;
+
+    @Inject private RestaurantService restaurantService;
+
+    public Result index() {
+        return ok(index.render(Form.form(LunchForm.class)));
+    }
+
+    public Result addOrder() {
+        Form<LunchForm> lunch = Form.form(LunchForm.class).bindFromRequest();
+
+        if (lunch.hasErrors) {
+            logger.debug(String.valueOf(lunch.errors()));
+            lunch.reject("Lunch order has errors");
+            return badRequest(index.render(Form.form(LunchForm.class)));
+        }
+
+        LunchForm lunchForm = lunch.get();
+        LunchOrder lunchOrder = new LunchOrder();
+
+        lunchOrder.setOrder(lunchForm.getOrder());
+        lunchOrder.setPerson(lunchForm.getPerson());
+        lunchOrder.setRestaurant(lunchForm.getRestaurant());
+        lunchOrder.setSpecialRequest(lunchForm.getSpecialRequest());
+
+        lunchService.save(lunchOrder);
+
+        return ok(index.render(Form.form(LunchForm.class)));
+    }
 }

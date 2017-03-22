@@ -1,4 +1,4 @@
-@(message: String, orderForm: Form[lunchOrder])
+@(message: String, orderForm: Form[LunchOrder])
 @implicitFieldConstructor = @{ helper.FieldConstructor(twitterBootstrapInput.render) }
 
 @main("Welcome to Play 2.0") {
@@ -29,10 +29,11 @@
     </nav>
 
     <div class="container">
-        @helper.form(action = routes.Application.addLunchOrder(), 'class -> "form-horizontal well") {
-            @helper.inputText(orderForm("name"), '_label -> "Name")
-            @helper.inputText(orderForm("lunchOrder"), '_label -> "Order")
+        @helper.form(action = routes.Application.addOrder(), 'class -> "form-horizontal well") {
+            @helper.inputText(orderForm("person"), '_label -> "Name")
             @helper.inputText(orderForm("restaurant"), '_label -> "Restaurant")
+            @helper.inputText(orderForm("order"), '_label -> "Order")
+            @helper.inputText(orderForm("specialRequest"), '_label -> "Special Requests")
 
             <div class="controls">
                 <input type="submit" class="btn btn-primary"/>
@@ -43,6 +44,7 @@
                 <th>Name</th>
                 <th>Restaurant</th>
                 <th>Order</th>
+                <th>Special Requests</th>
             </tr>
         </table>
     </div>
