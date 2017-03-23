@@ -2,6 +2,7 @@ package services;
 
 import models.LunchOrder;
 
+import views.html.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 @Service
 public class LunchServiceImpl implements LunchService {
-    private static final Logger logger = LoggerFactory.getLogger(TripServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LunchServiceImpl.class);
 
     @PersistenceContext
     private EntityManager em;
@@ -30,19 +31,19 @@ public class LunchServiceImpl implements LunchService {
         return em.find(LunchOrder.class, id);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = Exception.class)
     public Integer save(LunchOrder order) {
         try {
             if (order == null) {
                 throw new IllegalArgumentException();
             }
-            Set<LunchOrder> allOrders = getAllLunchOrders();
-            if (allOrders.stream().filter(orderDB -> orderDB.getPerson() == order.getPerson())) {
-                throw new IllegalArgumentException("An order already exists for " + order.getPerson());
-            }
+            List<LunchOrder> allOrders = getAllLunchOrders();
+//            if (allOrders.stream().filter((orderDB -> orderDB.getPerson() == order.getPerson())) != 0) {
+//                throw new IllegalArgumentException("An order already exists for " + order.getPerson());
+//            }
             em.persist(order);
-            logger.debug("Order for {} at {} made for {} and id {} saved to db.", order.getOrder(), order.getRestaurant(),
-                         order.getPerson(), order.getId());
+            logger.debug("Order for {} with special request {} at {} made for {} saved to db.", order.getOrder(),
+                         order.getSpecialRequest(), order.getRestaurant(), order.getPerson());
             return order.getId();
         }
         catch (Exception e) {
@@ -50,13 +51,14 @@ public class LunchServiceImpl implements LunchService {
         }
     }
     @Transactional
-    public Set<LunchOrder> getAllLunchOrders() {
-        CriteriaQuery<LunchOrder> query = em.getCriteriaBuilder().createQuery(LunchOrder.class);
-        query.from(LunchOrder.class);
-        List<LunchOrder> orders = em.createQuery(query).getResultList();
-        Set<LunchOrder> orderSet = new HashSet<LunchOrder>(ordres);
-
-        return orderSet;
+    public List<LunchOrder> getAllLunchOrders() {
+        List<LunchOrder> lunchList = em.createQuery("SELECT l FROM LunchOrder l", LunchOrder.class).getResultList();
+        lunchList.sort((LunchOrder lunch1, LunchOrder lunch2) -> lunch1.getPerson().compareTo(lunch2.getPerson())) ;
+        return lunchList;
     }
     
+    @Transactional
+    public void clearAllLunchOrders() {
+        em.createQuery("DELETE FROM LunchOrder").executeUpdate();
+    }
 }

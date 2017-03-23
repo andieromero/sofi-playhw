@@ -9,41 +9,37 @@ import models.Restaurant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-
 import javax.inject.Inject;
 
 import play.data.Form;
 import play.mvc.Result;
 
 import services.LunchService;
-import services.RestaurantService;
+//import services.RestaurantService;
 
 import views.html.*;
+import java.util.List;
+import java.util.List;
+import java.util.Set;
 
 @org.springframework.stereotype.Controller
 public class lunchCtrl extends play.mvc.Controller {
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    private static final Logger logger = LoggerFactory.getLogger(lunchCtrl.class);
 
     @Inject private LunchService lunchService;
 
-    @Inject private RestaurantService restaurantService;
-
     public Result index() {
-        return ok(index.render(Form.form(LunchForm.class)));
+        List<LunchOrder> orderSet = lunchService.getAllLunchOrders();
+        return ok(index.render(Form.form(LunchForm.class), orderSet));
     }
 
     public Result addOrder() {
         Form<LunchForm> lunch = Form.form(LunchForm.class).bindFromRequest();
-
-        if (lunch.hasErrors) {
-            logger.debug(String.valueOf(lunch.errors()));
+        List<LunchOrder> orderSet = lunchService.getAllLunchOrders();
+        if (lunch.hasErrors()) {
+            System.out.println(String.valueOf(lunch.errors()));
             lunch.reject("Lunch order has errors");
-            return badRequest(index.render(Form.form(LunchForm.class)));
+            return badRequest(index.render(Form.form(LunchForm.class), orderSet));
         }
 
         LunchForm lunchForm = lunch.get();
@@ -55,7 +51,16 @@ public class lunchCtrl extends play.mvc.Controller {
         lunchOrder.setSpecialRequest(lunchForm.getSpecialRequest());
 
         lunchService.save(lunchOrder);
-
-        return ok(index.render(Form.form(LunchForm.class)));
+        orderSet = lunchService.getAllLunchOrders();
+        return ok(index.render(Form.form(LunchForm.class), orderSet));
+    }
+    public Result getOrders() {
+        List<LunchOrder> orderSet = lunchService.getAllLunchOrders();
+        return ok(play.libs.Json.toJson(orderSet));
+    }
+    public Result clearOrders() {
+        lunchService.clearAllLunchOrders();
+        List<LunchOrder> orderSet = lunchService.getAllLunchOrders();
+        return ok(index.render(Form.form(LunchForm.class), orderSet));
     }
 }

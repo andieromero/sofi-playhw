@@ -25,35 +25,35 @@ public class Restaurant {
     @Column(name = "menu_url", nullable = false)
     private String menuUrl;
 
-    public getId() {
+    public Integer getId() {
         return id;
     }
 
-    public getRestaurant() {
+    public String getRestaurant() {
         return restaurant;
     }
 
-    public getItemsLeft() {
+    public Integer getItemsLeft() {
         return itemsLeft;
     }
 
-    public getMenuUrl() {
+    public String getMenuUrl() {
         return menuUrl;
     }
 
-    public setId(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public setRestaurant(String restaurant) {
+    public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 
-    public setItemsLeft(Integer itemsLeft) {
+    public void setItemsLeft(Integer itemsLeft) {
         this.itemsLeft = itemsLeft;
     }
 
-    public setMenuUrl(String menuUrl) {
+    public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
     }
 }

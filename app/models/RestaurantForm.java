@@ -17,23 +17,23 @@ public class RestaurantForm {
         return restaurant;
     }
 
-    public getItemsLeft() {
+    public Integer getItemsLeft() {
         return itemsLeft;
     }
 
-    public getMenuUrl() {
+    public String getMenuUrl() {
         return menuUrl;
     }
 
-    public setRestaurant(String restaurant) {
+    public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 
-    public setItemsLeft(Integer itemsLeft) {
+    public void setItemsLeft(Integer itemsLeft) {
         this.itemsLeft = itemsLeft;
     }
 
-    public setMenuUrl(String menuUrl) {
+    public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
     }
 }

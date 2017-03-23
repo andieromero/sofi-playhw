@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "lunch_order")
+@Table(name = "lunchorder")
 public class LunchOrder{
 
     @Id
@@ -16,7 +16,7 @@ public class LunchOrder{
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "order", nullable = false)
+    @Column(name = "lunch_order", nullable = false)
     private String order;
 
     @Column(name = "person", nullable = false)

@@ -1,51 +1,33 @@
-@(message: String, orderForm: Form[LunchOrder])
+@(lunchForm: Form[LunchForm], orderList: List[LunchOrder] )
 @implicitFieldConstructor = @{ helper.FieldConstructor(twitterBootstrapInput.render) }
 
 @main("Welcome to Play 2.0") {
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <img alt="Brand" src="https://d32ijn7u0aqfv4.cloudfront.net/wp/wp-content/uploads/20170127143017/SoFi_Logo.png">
-                </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Lunch Orders <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Today's Restaurants</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-
     <div class="container">
-        @helper.form(action = routes.Application.addOrder(), 'class -> "form-horizontal well") {
-            @helper.inputText(orderForm("person"), '_label -> "Name")
-            @helper.inputText(orderForm("restaurant"), '_label -> "Restaurant")
-            @helper.inputText(orderForm("order"), '_label -> "Order")
-            @helper.inputText(orderForm("specialRequest"), '_label -> "Special Requests")
-
-            <div class="controls">
-                <input type="submit" class="btn btn-primary"/>
+        @helper.form(action = routes.lunchCtrl.addOrder(), 'class -> "form-inline well") {
+            @helper.inputText(lunchForm("person"), '_label -> "Name")
+            @helper.inputText(lunchForm("restaurant"), '_label -> "Restaurant")
+            @helper.inputText(lunchForm("order"), '_label -> "Order")
+            @helper.inputText(lunchForm("specialRequest"), '_label -> "Special Requests")
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Submit</button>
             </div>
         }
-        <table id="tasks" class="table table-hover">
+        <table id="orders" class="table table-hover">
             <tr>
                 <th>Name</th>
                 <th>Restaurant</th>
                 <th>Order</th>
                 <th>Special Requests</th>
             </tr>
+            @for(order <- orderList){
+            <tr>
+                <td>@order.getPerson()</td>
+                <td>@order.getRestaurant()</td>
+                <td>@order.getOrder()</td>
+                <td>@order.getSpecialRequest()</td>
+            </tr>
+            }
         </table>
     </div>
 

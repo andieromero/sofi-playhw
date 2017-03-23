@@ -2,12 +2,14 @@ package services;
 
 import models.LunchOrder;
 
-import java.util.Set;
+import java.util.List;
 
 public interface LunchService {
     LunchOrder getOrderById(Integer id);
 
     Integer save(LunchOrder order);
 
-    Set<LunchOrder> getAllLunchOrders();
+    List<LunchOrder> getAllLunchOrders();
+
+    void clearAllLunchOrders();
 }

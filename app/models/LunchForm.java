@@ -35,7 +35,7 @@ public class LunchForm {
         this.order = order;
     }
     
-    public void setName(String person) {
+    public void setPerson(String person) {
         this.person = person;
     }
 

@@ -1,8 +1,10 @@
-body {
-    padding-top: 50px;
-}
 .navbar img {
     margin-left: auto;
     margin-right: auto;
     height: 120%;
 }
+button {
+    top: 10px;
+    position: relative;
+}
+
